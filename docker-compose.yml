@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    container_name: pgsql.home
+    environment:
+      POSTGRES_USER: bart
+      POSTGRES_PASSWORD: bart
+      POSTGRES_DB: home
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    networks:
+      - home
+      - oat-docker
+    volumes:
+      - home_postgres_volume:/var/lib/postgresql/data:cached
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - home
+      - oat-docker
+    ports:
+      - 9000:8080
+      
+networks:
+  oat-docker:
+    external: true
+  home:
+    driver: bridge
+
+volumes:
+  home_postgres_volume:
+    driver: local
